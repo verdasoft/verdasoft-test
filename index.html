@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verdasoft | Geliştirici Araç Kutusu</title>
+    <style>
+        /* TEMEL AYARLAR VE RENKLER (Koyu Tema) */
+        :root {
+            --bg-dark: #0f172a;
+            --bg-panel: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --border: #334155;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* SOL MENÜ (Sidebar) */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-panel);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 1px;
+        }
+
+        .logo span { color: var(--text-main); }
+
+        .menu-list {
+            list-style: none;
+            padding: 15px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .menu-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+        }
+
+        /* ANA EKRAN (Main Content) */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-dark);
+        }
+
+        .header {
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h2 { font-size: 1.25rem; font-weight: 600; }
+
+        .content-area {
+            padding: 30px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        /* ARAÇ KARTLARI (İçerik) */
+        .tool-panel {
+            display: none; /* Varsayılan olarak gizli, JS ile açacağız */
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .tool-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tool-title {
+            margin-bottom: 15px;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .tool-description {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+            /* Ağ Analizi Aracı Özel Tasarımı */
+.analiz-butonu {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.analiz-butonu:hover {
+    background-color: var(--primary-hover);
+}
+
+.veri-kutusu {
+    margin-top: 20px;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.veri-satiri {
+    display: flex;
+    flex-direction: column;
+}
+
+.veri-etiket {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.veri-deger {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+	
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="logo">Verda<span>soft</span></div>
+        <ul class="menu-list">
+            <li class="menu-item active" onclick="aracDegistir('ag-analiz', this)">🌐 Ağ ve IP Analizi</li>
+            <li class="menu-item" onclick="aracDegistir('json-araci', this)">{ } JSON Şekillendirici</li>
+            <li class="menu-item" onclick="aracDegistir('base64-araci', this)">🔐 Base64 Dönüştürücü</li>
+            <li class="menu-item" onclick="aracDegistir('zaman-araci', this)">⏱️ Timestamp Çevirici</li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <header class="header">
+            <h2 id="aktif-arac-baslik">Ağ ve IP Analizi</h2>
+        </header>
+
+        <div class="content-area">
+            
+            <div id="ag-analiz" class="tool-panel active">
+    <h3 class="tool-title">Bağlantı Bilgileriniz</h3>
+    <p class="tool-description">Bu araç Cloudflare Workers üzerinden IP adresinizi ve konumunuzu anında tespit eder.</p>
+    
+    <div id="ip-sonuc-alani">
+        <button id="ip-sorgula-btn" class="analiz-butonu">Analizi Başlat</button>
+        <div id="ip-detaylar" class="veri-kutusu" style="display: none;">
+            </div>
+    </div>
+</div>
+
+            <div id="json-araci" class="tool-panel">
+                <h3 class="tool-title">JSON Formatter & Validator</h3>
+                <p class="tool-description">Karmaşık JSON verilerini okunabilir formata dönüştürün ve hataları ayıklayın.</p>
+                </div>
+
+            <div id="base64-araci" class="tool-panel">
+                <h3 class="tool-title">Base64 Encode / Decode</h3>
+                <p class="tool-description">Metinleri saniyeler içinde Base64 formatına çevirin veya şifreyi çözün.</p>
+                </div>
+
+            <div id="zaman-araci" class="tool-panel">
+                <h3 class="tool-title">Unix Timestamp Çevirici</h3>
+                <p class="tool-description">Unix zaman damgalarını okunabilir tarihlere dönüştürün.</p>
+                </div>
+
+        </div>
+    </main>
+
+    <script>
+        function aracDegistir(aracId, tiklananMenu) {
+            // 1. Tüm menü öğelerinden 'active' sınıfını kaldır
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // 2. Tıklanan menüye 'active' sınıfını ekle
+            tiklananMenu.classList.add('active');
+
+            // 3. Üst başlığı güncellen
+            document.getElementById('aktif-arac-baslik').innerText = tiklananMenu.innerText.replace(/[^\w\sğüşıöçĞÜŞİÖÇ]/gi, '').trim();
+
+            // 4. Tüm araç panellerini gizle
+            document.querySelectorAll('.tool-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+
+            // 5. Seçilen aracı göster
+            document.getElementById(aracId).classList.add('active');
+        }
+        // Ağ Analizi Motoru
+document.getElementById('ip-sorgula-btn').addEventListener('click', async () => {
+    const buton = document.getElementById('ip-sorgula-btn');
+    const sonucKutusu = document.getElementById('ip-detaylar');
+    
+    // BURAYA KENDİ WORKER LİNKİNİZİ YAZIN
+    const workerAPI = 'https://verdasoft-ip.muract26.workers.dev/'; 
+
+    buton.innerText = 'Analiz Ediliyor...';
+    buton.disabled = true;
+
+    try {
+        const yanit = await fetch(workerAPI);
+        const veri = await yanit.json();
+
+        sonucKutusu.innerHTML = `
+            <div class="veri-satiri">
+                <span class="veri-etiket">IP Adresi</span>
+                <span class="veri-deger" style="color: #3b82f6;">${veri.ip}</span>
+            </div>
+            <div class="veri-satiri">
+                <span class="veri-etiket">Konum</span>
+                <span class="veri-deger">${veri.sehir}, ${veri.ulke}</span>
+            </div>
+            <div class="veri-satiri">
+                <span class="veri-etiket">Bölge (Region)</span>
+                <span class="veri-deger">${veri.bolge}</span>
+            </div>
+            <div class="veri-satiri">
+                <span class="veri-etiket">ISP (Servis Sağlayıcı)</span>
+                <span class="veri-deger">${veri.isp}</span>
+            </div>
+            <div class="veri-satiri">
+                <span class="veri-etiket">ASN</span>
+                <span class="veri-deger">${veri.asn}</span>
+            </div>
+            <div class="veri-satiri">
+                <span class="veri-etiket">Zaman Dilimi</span>
+                <span class="veri-deger">${veri.zamanDilimi}</span>
+            </div>
+        `;
+        
+        sonucKutusu.style.display = 'grid';
+        buton.style.display = 'none'; // Analiz bitince butonu gizle
+
+    } catch (hata) {
+        sonucKutusu.innerHTML = `<p style="color: #ef4444;">Analiz başarısız oldu. Lütfen bağlantınızı kontrol edin.</p>`;
+        sonucKutusu.style.display = 'block';
+        buton.innerText = 'Tekrar Dene';
+        buton.disabled = false;
+    }
+});
+    </script>
+</body>
+</html>
